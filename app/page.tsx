@@ -1,6 +1,5 @@
 'use client'
 
-import { log } from 'node:console'
 import { useState } from 'react'
 
 export default function Page() {
