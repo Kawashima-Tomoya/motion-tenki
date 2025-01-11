@@ -14,7 +14,7 @@ export async function getWeather(_prevState: any, formData: FormData) {
   if (!res.ok) {
     return {
       city,
-      weather: 'サーバーエラーが発生しました',
+      weather: '都市が見つかりません',
     }
   }
 

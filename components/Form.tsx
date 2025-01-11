@@ -29,13 +29,13 @@ export function Form() {
         />
         <button type="submit" className="rounded bg-indigo-600 p-2 text-white" disabled={isPending}>天気を取得</button>
       </form>
-      <div className="mx-auto mt-5 w-[200px] text-left">
+      <div className="mx-auto mt-5 w-[280px] text-left">
         <h1 className="">
-          City:
+          City:&nbsp;
           {state.city}
         </h1>
         <p className="text-left">
-          Weather:
+          Weather:&nbsp;
           {state.weather}
         </p>
       </div>
