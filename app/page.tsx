@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 'use client'
 
 import { useState } from 'react'
@@ -9,10 +11,9 @@ export default function Page() {
   async function getWeather() {
     const res = await fetch(`/api/weather?city=${city}`)
     const data = await res.json()
-    setCity(data.weather.name)
-    setWeather(data.weather.weather[0].main)
-    // eslint-disable-next-line no-console
     console.log(data)
+    // setCity(data.weather.current.weather[0])
+    setWeather(data.weather.current.weather[0].main)
   }
 
   return (
