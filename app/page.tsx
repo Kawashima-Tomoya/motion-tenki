@@ -12,8 +12,7 @@ export default function Page() {
     const res = await fetch(`/api/weather?city=${city}`)
     const data = await res.json()
     console.log(data)
-    // setCity(data.weather.current.weather[0])
-    setWeather(data.weather.current.weather[0].main)
+    setWeather(data.weather.current.weather[0].description)
   }
 
   return (
