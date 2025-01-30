@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: '天気予報',
-  description: '天気予報を表示するアプリケーション',
+  description: '天気予報アプリケーション',
 }
 
 export default function RootLayout({
