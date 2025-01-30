@@ -9,12 +9,15 @@ export function Form() {
   const initialState = {
     city: '',
     weather: '',
+    message: '',
   }
 
   const [state, formAction, isPending] = useActionState(
     getWeather,
     initialState,
   )
+
+  const displayMessage = (state.message && state.message) || state.weather
 
   return (
     <div className="mt-8 text-center">
@@ -36,7 +39,7 @@ export function Form() {
         </h1>
         <p className="text-left">
           Weather:&nbsp;
-          {state.weather}
+          {displayMessage}
         </p>
       </div>
     </div>
