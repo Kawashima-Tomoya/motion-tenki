@@ -17,8 +17,6 @@ export function Form() {
     initialState,
   )
 
-  const displayMessage = (state.message && state.message) || state.weather
-
   return (
     <div className="mt-8 text-center">
       <form action={formAction}>
@@ -39,7 +37,9 @@ export function Form() {
         </h1>
         <p className="text-left">
           Weather:&nbsp;
-          {displayMessage}
+          {state.weather
+            ? state.weather
+            : <span className="text-left text-sm text-red-400">{state.message}</span>}
         </p>
       </div>
     </div>
