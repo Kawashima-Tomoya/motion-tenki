@@ -3,69 +3,74 @@
 
 import process from 'node:process'
 
-export async function getWeather(_prevState: any, formData: FormData) {
-  const city = formData.get('city') as string
-  if (!city) {
-    return {
-      city,
-      weather: '',
-      message: '都市名を入力してください',
-    }
-  }
+interface WeatherResponse {
+  city: string
+  weather: string
+  message: string
+}
 
-  try {
-    const resGeo = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${process.env.WEATHER_API_KEY}`)
-    if (!resGeo.ok) {
-      return {
-        city,
-        weather: '',
-        message: '地理情報の取得に失敗しました',
-      }
-    }
-    const dataGeo = await resGeo.json()
-    if (!dataGeo.length) {
-      return {
-        city,
-        weather: '',
-        message: '都市が見つかりません',
-      }
-    }
-    const lat = dataGeo[0].lat
-    const lon = dataGeo[0].lon
+const API = {
+  GEO: 'http://api.openweathermap.org/geo/1.0/direct',
+  WEATHER: 'https://api.openweathermap.org/data/3.0/onecall',
+} as const
 
-    const resWeather = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely,hourly,daily,alerts&appid=${process.env.WEATHER_API_KEY}&lang=ja`)
-    if (!resWeather.ok) {
-      return {
-        city,
-        weather: '',
-        message: '天気情報の取得に失敗しました',
-      }
-    }
-    const dataWeather = await resWeather.json()
-    console.log(dataWeather)
-    console.log(dataWeather.current.weather)
+const ERROR_MESSAGES = {
+  CITY_REQUIRED: '都市名を入力してください',
+  GEO_FAILED: '地理情報の取得に失敗しました',
+  CITY_NOT_FOUND: '都市が見つかりません',
+  WEATHER_FAILED: '天気情報の取得に失敗しました',
+  GENERAL_ERROR: '情報の取得に失敗しました。再度お試しください。',
+} as const
 
-    const weather = dataWeather.current.weather[0].description
-
-    return { city, weather, message: '' }
-  }
-  catch (error) {
-    console.error(error)
-    return {
-      city,
-      weather: '',
-      message: '情報の取得に失敗しました。再度お試しください。',
-    }
+function createResponse(city: string, weather = '', message = ''): WeatherResponse {
+  return {
+    city,
+    weather,
+    message,
   }
 }
 
-// このコードは、state.message が存在する場合は state.message を返し、
-// 存在しない場合は state.weather を返します。
-// const displayMessage = (state.message && state.message) || state.weather;
+async function getGeoLocation(city: string) {
+  const res = await fetch(`${API.GEO}?q=${city}&appid=${process.env.WEATHER_API_KEY}`)
+  if (!res.ok)
+    throw new Error(ERROR_MESSAGES.GEO_FAILED)
 
-// 例:
-// state = { message: 'エラーが発生しました', weather: '晴れ' } の場合、
-// displayMessage は 'エラーが発生しました' になります。
-//
-// state = { message: '', weather: '晴れ' } の場合、
-// displayMessage は '晴れ' になります。
+  const data = await res.json()
+  if (!data.length)
+    throw new Error(ERROR_MESSAGES.CITY_NOT_FOUND)
+
+  return { lat: data[0].lat, lon: data[0].lon }
+}
+
+async function getWeatherData(lat: number, lon: number) {
+  const res = await fetch(
+    `${API.WEATHER}?lat=${lat}&lon=${lon}&units=metric&exclude=current,minutely,hourly,alerts&appid=${process.env.WEATHER_API_KEY}&lang=ja`,
+  )
+  if (!res.ok)
+    throw new Error(ERROR_MESSAGES.WEATHER_FAILED)
+
+  const data = await res.json()
+  console.log(data)
+
+  return data.current.weather[0].description
+}
+
+export async function getWeather(_prevState: any, formData: FormData) {
+  const city = formData.get('city') as string
+  if (!city)
+    return createResponse('', '', ERROR_MESSAGES.CITY_REQUIRED)
+
+  try {
+    const { lat, lon } = await getGeoLocation(city)
+    const weather = await getWeatherData(lat, lon)
+    return createResponse(city, weather)
+  }
+  catch (error) {
+    console.error(error)
+    return createResponse(
+      city,
+      '',
+      error instanceof Error ? error.message : ERROR_MESSAGES.GENERAL_ERROR,
+    )
+  }
+}
