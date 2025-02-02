@@ -23,7 +23,7 @@ export function Form() {
         <input
           type="text"
           placeholder="都市名を入力"
-          className="mr-3 border p-2"
+          className="mr-3 rounded border p-2"
           value={city}
           name="city"
           onChange={e => setCity(e.target.value)}
