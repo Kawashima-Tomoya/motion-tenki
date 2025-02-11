@@ -2,20 +2,20 @@ import type { WeatherData } from '../types/weather'
 import { motion } from 'framer-motion'
 import { Cloud, CloudRain, CloudSun, Droplets, Sun, Wind } from 'lucide-react'
 
-interface WeatherDetailProps {
-  data: WeatherData
-}
+// interface WeatherDetailProps {
+//   data: WeatherData
+// }
 
-const iconMap = {
-  'sun': { icon: Sun, color: '#FFD700' },
-  'cloud': { icon: Cloud, color: '#A9A9A9' },
-  'cloud-sun': { icon: CloudSun, color: '#87CEEB' },
-  'cloud-rain': { icon: CloudRain, color: '#4682B4' },
-}
+// const iconMap = {
+//   'sun': { icon: Sun, color: '#FFD700' },
+//   'cloud': { icon: Cloud, color: '#A9A9A9' },
+//   'cloud-sun': { icon: CloudSun, color: '#87CEEB' },
+//   'cloud-rain': { icon: CloudRain, color: '#4682B4' },
+// }
 
-export function WeatherDetail({ data }: WeatherDetailProps) {
-  const { icon: Icon, color } = iconMap[data.icon as keyof typeof iconMap]
-  const date = new Date(data.date)
+export function WeatherDetail({ data }: any) {
+  // const { icon: Icon, color } = iconMap[data.icon as keyof typeof iconMap]
+  const date = new Date(data.dt * 1000)
 
   return (
     <motion.div
@@ -30,20 +30,20 @@ export function WeatherDetail({ data }: WeatherDetailProps) {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div className="flex flex-col items-center sm:items-start">
           <div className="mb-2 flex items-center">
-            <Icon className="size-16 sm:size-24" style={{ color }} />
+            {/* <Icon className="size-16 sm:size-24" style={{ color }} /> */}
             <div className="ml-4 sm:ml-6">
               <p className="text-lg font-medium text-weather-text-light dark:text-weather-text-dark sm:text-xl">
                 {data.description}
               </p>
               <p className="mt-1 text-2xl font-semibold sm:text-3xl">
                 <span className="text-red-500 dark:text-red-400">
-                  {data.highTemp}
+                  {Math.round(data.temp.max)}
                   °
                 </span>
                 {' '}
                 /
                 <span className="text-blue-500 dark:text-blue-400">
-                  {data.lowTemp}
+                  {Math.round(data.temp.min)}
                   °
                 </span>
               </p>
