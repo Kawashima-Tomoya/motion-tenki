@@ -1,6 +1,6 @@
 import type { WeatherData } from '../types/weather'
 import { motion } from 'framer-motion'
-import { Cloud, CloudRain, CloudSun, Sun } from 'lucide-react'
+import { Cloud, CloudDrizzle, CloudLightning, CloudSnow, CloudSun, Sun, Umbrella } from 'lucide-react'
 
 // interface DayWeatherProps {
 //   data: WeatherData
@@ -8,15 +8,18 @@ import { Cloud, CloudRain, CloudSun, Sun } from 'lucide-react'
 //   onClick: () => void
 // }
 
-// const iconMap = {
-//   'sun': { icon: Sun, color: '#FFD700' },
-//   'cloud': { icon: Cloud, color: '#A9A9A9' },
-//   'cloud-sun': { icon: CloudSun, color: '#87CEEB' },
-//   'cloud-rain': { icon: CloudRain, color: '#4682B4' },
-// }
+const iconMap = {
+  Clear: { icon: Sun, color: '#FFD700' },
+  Clouds: { icon: Cloud, color: '#A9A9A9' },
+  Rain: { icon: Umbrella, color: '#4682B4' },
+  thunderstorm: { icon: CloudLightning, color: '#4B0082' },
+  Drizzle: { icon: CloudDrizzle, color: '#778899' },
+  Snow: { icon: CloudSnow, color: '#FFFFFF' },
+  // 'cloud-sun': { icon: CloudSun, color: '#87CEEB' },
+}
 
 export function DayWeather({ data, isSelected, onClick }: any) {
-  // const { icon: Icon, color } = iconMap[data.icon as keyof typeof iconMap]
+  const { icon: Icon, color } = iconMap[data.weather[0].main as keyof typeof iconMap]
   const date = new Date(data.dt * 1000)
 
   return (
@@ -34,7 +37,7 @@ export function DayWeather({ data, isSelected, onClick }: any) {
       <p className="mb-2 text-sm text-weather-text-light opacity-80 dark:text-weather-text-dark">
         {date.toLocaleDateString('ja-JP', { weekday: 'short' })}
       </p>
-      {/* <Icon className="mx-auto my-2 size-12" style={{ color }} /> */}
+      <Icon className="mx-auto my-2 size-12" style={{ color }} />
       <p className="text-sm font-medium">
         <span className="text-red-500 dark:text-red-400">
           {Math.round(data.temp.max)}
