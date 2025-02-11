@@ -16,7 +16,7 @@ export function Form() {
     getWeather,
     initialState,
   )
-  const [city, setCity] = useState('')
+  const [_city, setCity] = useState('')
   const [selectedDay, setSelectedDay] = useState('')
 
   const handleDayClick = (date: string) => {
@@ -32,7 +32,6 @@ export function Form() {
           type="text"
           placeholder="都市名を入力"
           className="mr-3 rounded border p-2"
-          value={city}
           name="city"
           onChange={e => setCity(e.target.value)}
         />
@@ -42,7 +41,7 @@ export function Form() {
 
       <div>
         {weatherState.city && (
-          <p className="mt-4 font-bold">
+          <p className="mt-8 font-bold">
             {`${weatherState.city}の天気`}
           </p>
         )}
@@ -50,7 +49,7 @@ export function Form() {
         {/* <WeatherDetail data={selectedDayData} /> */}
         { weatherState.weather.length
           ? (
-              <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
+              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
                 {weatherState.weather.map((day: any) => (
                   <DayWeather
                     key={day.dt}
