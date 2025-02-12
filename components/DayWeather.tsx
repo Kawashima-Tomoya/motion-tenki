@@ -1,12 +1,5 @@
-import type { WeatherData } from '../types/weather'
 import { motion } from 'framer-motion'
 import { Cloud, CloudDrizzle, CloudLightning, CloudSnow, CloudSun, Sun, Umbrella } from 'lucide-react'
-
-// interface DayWeatherProps {
-//   data: WeatherData
-//   isSelected: boolean
-//   onClick: () => void
-// }
 
 const iconMap = {
   Clear: { icon: Sun, color: '#FFD700' },
@@ -15,7 +8,6 @@ const iconMap = {
   thunderstorm: { icon: CloudLightning, color: '#4B0082' },
   Drizzle: { icon: CloudDrizzle, color: '#778899' },
   Snow: { icon: CloudSnow, color: '#FFFFFF' },
-  // 'cloud-sun': { icon: CloudSun, color: '#87CEEB' },
 }
 
 export function DayWeather({ data, isSelected, onClick }: any) {
@@ -24,11 +16,13 @@ export function DayWeather({ data, isSelected, onClick }: any) {
 
   return (
     <motion.div
-      className={`glass cursor-pointer rounded-lg p-4 text-center ${
-        isSelected ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''
+      className={`glass cursor-pointer rounded-lg p-4 text-center transition-all ${
+        isSelected
+          ? 'bg-indigo-50 ring-2 ring-indigo-600 dark:bg-indigo-900/30 dark:ring-indigo-400'
+          : 'hover:bg-gray-50 dark:hover:bg-gray-800/30'
       }`}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 1 }}
+      whileHover={!isSelected ? { scale: 1.05 } : undefined}
+      whileTap={{ scale: 0.95 }}
       onClick={onClick}
     >
       <p className="font-semibold text-weather-text-light dark:text-weather-text-dark">
@@ -45,6 +39,7 @@ export function DayWeather({ data, isSelected, onClick }: any) {
         </span>
         {' '}
         /
+        {' '}
         <span className="text-blue-500 dark:text-blue-400">
           {Math.round(data.temp.min)}
           °
