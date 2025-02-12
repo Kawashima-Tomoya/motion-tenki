@@ -1,20 +1,25 @@
 import { motion } from 'framer-motion'
-import { Cloud, CloudDrizzle, CloudLightning, CloudSnow, Droplets, Sun, Umbrella, Wind } from 'lucide-react'
+import { Cloud, CloudDrizzle, CloudFog, CloudLightning, CloudSnow, CloudSun, Droplets, Sun, Umbrella, Wind } from 'lucide-react'
 
-const iconMap = {
+const iconMap: { [key: string]: { icon: any, color: string } } = {
   Clear: { icon: Sun, color: '#FFD700' },
   Clouds: { icon: Cloud, color: '#A9A9A9' },
   Rain: { icon: Umbrella, color: '#4682B4' },
-  thunderstorm: { icon: CloudLightning, color: '#4B0082' },
+  Thunderstorm: { icon: CloudLightning, color: '#4B0082' },
   Drizzle: { icon: CloudDrizzle, color: '#778899' },
   Snow: { icon: CloudSnow, color: '#FFFFFF' },
+  Mist: { icon: CloudFog, color: '#A9A9A9' },
+  Fog: { icon: CloudFog, color: '#A9A9A9' },
+  CloudSun: { icon: CloudSun, color: '#FFD700' },
 }
 
 export function WeatherDetail({ data }: any) {
   if (!data)
     return null
 
-  const { icon: Icon, color } = iconMap[data.weather[0].main as keyof typeof iconMap]
+  const weatherMain = data.weather[0].main as string
+  const weatherConfig = iconMap[weatherMain] || iconMap.CloudSun
+  const { icon: Icon, color } = weatherConfig
   const date = new Date(data.dt * 1000)
 
   return (

@@ -1,28 +1,31 @@
 import { motion } from 'framer-motion'
-import { Cloud, CloudDrizzle, CloudLightning, CloudSnow, CloudSun, Sun, Umbrella } from 'lucide-react'
+import { Cloud, CloudDrizzle, CloudFog, CloudLightning, CloudSnow, CloudSun, Sun, Umbrella } from 'lucide-react'
 
-const iconMap = {
+const iconMap: { [key: string]: { icon: any, color: string } } = {
   Clear: { icon: Sun, color: '#FFD700' },
   Clouds: { icon: Cloud, color: '#A9A9A9' },
   Rain: { icon: Umbrella, color: '#4682B4' },
-  thunderstorm: { icon: CloudLightning, color: '#4B0082' },
+  Thunderstorm: { icon: CloudLightning, color: '#4B0082' },
   Drizzle: { icon: CloudDrizzle, color: '#778899' },
   Snow: { icon: CloudSnow, color: '#FFFFFF' },
+  Mist: { icon: CloudFog, color: '#A9A9A9' },
+  Fog: { icon: CloudFog, color: '#A9A9A9' },
+  CloudSun: { icon: CloudSun, color: '#FFD700' },
 }
 
 export function DayWeather({ data, isSelected, onClick }: any) {
-  const { icon: Icon, color } = iconMap[data.weather[0].main as keyof typeof iconMap]
+  const weatherMain = data.weather[0].main as string
+  const weatherConfig = iconMap[weatherMain] || iconMap.Clouds
+  const { icon: Icon, color } = weatherConfig
   const date = new Date(data.dt * 1000)
 
   return (
     <motion.div
-      className={`glass cursor-pointer rounded-lg p-4 text-center transition-all ${
-        isSelected
-          ? 'bg-indigo-50 ring-2 ring-indigo-600 dark:bg-indigo-900/30 dark:ring-indigo-400'
-          : 'hover:bg-gray-50 dark:hover:bg-gray-800/30'
+      className={`glass cursor-pointer rounded-lg p-4 text-center ${
+        isSelected ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''
       }`}
       whileHover={!isSelected ? { scale: 1.05 } : undefined}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.1 }}
       onClick={onClick}
     >
       <p className="font-semibold text-weather-text-light dark:text-weather-text-dark">
