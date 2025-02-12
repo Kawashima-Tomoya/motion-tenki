@@ -1,20 +1,25 @@
-import type { WeatherData } from '../types/weather'
 import { motion } from 'framer-motion'
-import { Cloud, CloudRain, CloudSun, Droplets, Sun, Wind } from 'lucide-react'
+import { Cloud, CloudDrizzle, CloudFog, CloudLightning, CloudSnow, CloudSun, Droplets, Sun, Umbrella, Wind } from 'lucide-react'
 
-// interface WeatherDetailProps {
-//   data: WeatherData
-// }
-
-// const iconMap = {
-//   'sun': { icon: Sun, color: '#FFD700' },
-//   'cloud': { icon: Cloud, color: '#A9A9A9' },
-//   'cloud-sun': { icon: CloudSun, color: '#87CEEB' },
-//   'cloud-rain': { icon: CloudRain, color: '#4682B4' },
-// }
+const iconMap: { [key: string]: { icon: any, color: string } } = {
+  Clear: { icon: Sun, color: '#FFD700' },
+  Clouds: { icon: Cloud, color: '#A9A9A9' },
+  Rain: { icon: Umbrella, color: '#4682B4' },
+  Thunderstorm: { icon: CloudLightning, color: '#4B0082' },
+  Drizzle: { icon: CloudDrizzle, color: '#778899' },
+  Snow: { icon: CloudSnow, color: '#FFFFFF' },
+  Mist: { icon: CloudFog, color: '#A9A9A9' },
+  Fog: { icon: CloudFog, color: '#A9A9A9' },
+  CloudSun: { icon: CloudSun, color: '#FFD700' },
+}
 
 export function WeatherDetail({ data }: any) {
-  // const { icon: Icon, color } = iconMap[data.icon as keyof typeof iconMap]
+  if (!data)
+    return null
+
+  const weatherMain = data.weather[0].main as string
+  const weatherConfig = iconMap[weatherMain] || iconMap.CloudSun
+  const { icon: Icon, color } = weatherConfig
   const date = new Date(data.dt * 1000)
 
   return (
@@ -30,10 +35,10 @@ export function WeatherDetail({ data }: any) {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div className="flex flex-col items-center sm:items-start">
           <div className="mb-2 flex items-center">
-            {/* <Icon className="size-16 sm:size-24" style={{ color }} /> */}
+            <Icon className="size-16 sm:size-24" style={{ color }} />
             <div className="ml-4 sm:ml-6">
               <p className="text-lg font-medium text-weather-text-light dark:text-weather-text-dark sm:text-xl">
-                {data.description}
+                {data.weather[0].description}
               </p>
               <p className="mt-1 text-2xl font-semibold sm:text-3xl">
                 <span className="text-red-500 dark:text-red-400">
@@ -63,7 +68,7 @@ export function WeatherDetail({ data }: any) {
             <Wind className="mr-3 size-6 text-green-500 dark:text-green-400" />
             <span className="text-base sm:text-lg">
               風速:
-              {data.windSpeed}
+              {data.wind_speed}
               m/s
             </span>
           </p>

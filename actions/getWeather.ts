@@ -4,7 +4,19 @@ import process from 'node:process'
 import { getGeoLocation } from './getGeoLocation'
 
 export interface WeatherResponse {
-  weather: []
+  weather: Array<{
+    dt: number
+    temp: {
+      max: number
+      min: number
+    }
+    weather: Array<{
+      main: string
+      description: string
+    }>
+    humidity: number
+    wind_speed: number
+  }>
   city: string
   message: string
 }

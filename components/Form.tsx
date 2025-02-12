@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import type { WeatherResponse } from '~/actions/getWeather'
 import { getWeather } from '~/actions/getWeather'
 import { DayWeather } from './DayWeather'
@@ -17,13 +17,19 @@ export function Form() {
     initialState,
   )
   const [_city, setCity] = useState('')
-  const [selectedDay, setSelectedDay] = useState('')
+  const [selectedDay, setSelectedDay] = useState<number | null>(null)
 
-  const handleDayClick = (date: string) => {
-    setSelectedDay(date)
+  useEffect(() => {
+    if (weatherState.weather.length > 0) {
+      setSelectedDay(weatherState.weather[0].dt)
+    }
+  }, [weatherState.weather])
+
+  const handleDayClick = (day: any) => {
+    setSelectedDay(day.dt)
   }
 
-  // const selectedDayData = weatherState.find((day: any) => day.dt === selectedDay) || weatherState[0]
+  const selectedDayData = weatherState.weather.find((day: any) => day.dt === selectedDay) || null
 
   return (
     <div className="mt-8 text-center">
@@ -46,7 +52,7 @@ export function Form() {
           </p>
         )}
 
-        {/* <WeatherDetail data={selectedDayData} /> */}
+        <WeatherDetail data={selectedDayData} />
         { weatherState.weather.length
           ? (
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
@@ -55,7 +61,7 @@ export function Form() {
                     key={day.dt}
                     data={day}
                     isSelected={day.dt === selectedDay}
-                    onClick={() => handleDayClick(day.dt)}
+                    onClick={() => handleDayClick(day)}
                   />
                 ))}
               </div>
