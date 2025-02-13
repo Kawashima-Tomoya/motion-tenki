@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Cloud, CloudDrizzle, CloudFog, CloudLightning, CloudSnow, CloudSun, Sun, Umbrella } from 'lucide-react'
 
 const iconMap: { [key: string]: { icon: any, color: string } } = {
-  Clear: { icon: Sun, color: '#FFD700' },
+  Clear: { icon: Sun, color: '#FF7F50' },
   Clouds: { icon: Cloud, color: '#A9A9A9' },
   Rain: { icon: Umbrella, color: '#4682B4' },
   Thunderstorm: { icon: CloudLightning, color: '#4B0082' },
@@ -13,7 +13,13 @@ const iconMap: { [key: string]: { icon: any, color: string } } = {
   CloudSun: { icon: CloudSun, color: '#FFD700' },
 }
 
-export function DayWeather({ data, isSelected, onClick }: any) {
+interface DayWeatherProps {
+  data: any
+  isSelected: boolean
+  onClick: () => void
+}
+
+export function DayWeather({ data, isSelected, onClick }: DayWeatherProps) {
   const weatherMain = data.weather[0].main as string
   const weatherConfig = iconMap[weatherMain] || iconMap.Clouds
   const { icon: Icon, color } = weatherConfig
@@ -21,11 +27,9 @@ export function DayWeather({ data, isSelected, onClick }: any) {
 
   return (
     <motion.div
-      className={`glass cursor-pointer rounded-lg p-4 text-center ${
-        isSelected ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''
+      className={`glass cursor-pointer rounded-lg p-4 text-center transition-all hover:scale-105 ${
+        isSelected ? 'scale-105 !ring-2 !ring-blue-700 dark:!ring-blue-200' : ''
       }`}
-      whileHover={!isSelected ? { scale: 1.05 } : undefined}
-      whileTap={{ scale: 0.1 }}
       onClick={onClick}
     >
       <p className="font-semibold text-weather-text-light dark:text-weather-text-dark">

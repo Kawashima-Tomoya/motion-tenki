@@ -33,21 +33,21 @@ export function Form() {
 
   return (
     <div className="mt-8 text-center">
-      <form action={formAction}>
+      <form action={formAction} className="grid gap-3 max-sm:grid-cols-[1fr_auto] sm:flex sm:justify-center" method="post">
         <input
           type="text"
           placeholder="都市名を入力"
-          className="mr-3 rounded border p-2"
+          className="rounded border p-2 sm:w-60"
           name="city"
           onChange={e => setCity(e.target.value)}
         />
-        <button type="submit" className="rounded bg-indigo-600 p-2 text-white" disabled={isPending}>天気を取得</button>
+        <button type="submit" className="rounded bg-indigo-600 px-4 py-2 text-white" disabled={isPending}>検索</button>
         { weatherState.message && <p className="mt-4 text-sm text-red-400">{weatherState.message}</p> }
       </form>
 
       <div>
         {weatherState.city && (
-          <p className="mt-8 font-bold">
+          <p className="mt-8 text-xl font-bold">
             {`${weatherState.city}の天気`}
           </p>
         )}
